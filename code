@@ -1,0 +1,36 @@
+import smtplib 
+from email.mime.text  import MIMEText
+from email.header import Header
+import csv
+k=2
+from_addr = '1668326607@qq.com'
+to_addrs = [['小可爱','1668326607@qq.com']]
+password = input('请输入您的授权码（非密码）:')
+host = 'smtp.qq.com'
+port = 465
+server = smtplib.SMTP_SSL(host)
+server.connect(host,port)
+server.login(from_addr,password)
+text = ('''最终版本完成啦！\n\n\n这是用csv写入或者直接读取联系人邮箱的版本！''')
+msg=MIMEText(text,'plain','utf-8')
+msg['From']=Header(from_addr)
+msg["Subject"] = Header('人生苦短，我用python')
+#with open(r'test1\to_addrs2.csv','w',newline="") as store:    
+#    writer = csv.writer(store)
+#    for row in to_addrs:
+#        writer.writerow(row)
+#store.close()
+for i in range(k):
+    with open(r'test1\to_addrs2.csv','r',newline = '') as file:
+        reader = csv.reader(file)
+        for row in reader :
+            to_addrs = row[1]
+            msg['To']=Header(row[0])
+            try:
+                server.sendmail(from_addr,to_addrs,msg.as_string())
+                print('成功发送！')
+            except:
+                print('发送失败')
+file.close()
+server.quit()        
+        
